@@ -29,3 +29,12 @@ export function getParam(param) {
 
   return product
 }
+
+export function renderListWithTemplate(templateFn, parentElement, list, position="afterBegin", clear=false) {
+  const htmlStrings = list.map(productCardTemplate);
+
+  if (clear) {
+    parentElement.innerHTMl = "";
+  }
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
