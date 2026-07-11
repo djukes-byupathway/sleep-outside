@@ -40,6 +40,8 @@ function cartRemoveHandler(e) {
   removeItemFromCart(e.target.dataset.id);
 }
 
-document.querySelector(".product-list").addEventListener("click", cartRemoveHandler);
+document
+  .querySelector(".product-list")
+  .addEventListener("click", cartRemoveHandler);
 
 renderCartContents();

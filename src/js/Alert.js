@@ -28,7 +28,9 @@ export default class Alert {
 
     const alertList = document.createElement("section");
     alertList.classList.add("alert-list");
-    alertList.innerHTML = alerts.map((alert) => this.alertTemplate(alert)).join("");
+    alertList.innerHTML = alerts
+      .map((alert) => this.alertTemplate(alert))
+      .join("");
 
     document.querySelector("main").prepend(alertList);
   }
