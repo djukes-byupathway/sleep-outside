@@ -21,3 +21,35 @@ export function setClick(selector, callback) {
   });
   qs(selector).addEventListener("click", callback);
 }
+
+export function getParam(param) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get('product')
+
+  return product
+}
+
+export function renderListWithTemplate(templateFn, parentElement, list, position="afterBegin", clear=false) {
+  const htmlStrings = list.map(productCardTemplate);
+
+  if (clear) {
+    parentElement.innerHTMl = "";
+  }
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
+
+export function getDiscount(price) {
+  if (price > 300) {
+    return 20;
+  } else if (price >= 150) {
+    return 12;
+  } else {
+    return 5;
+  }
+}
+
+export function getDiscountedPrice(price) {
+  const discount = getDiscount(price);
+  return price - (price * discount / 100);
+}
