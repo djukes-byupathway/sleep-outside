@@ -38,3 +38,18 @@ export function renderListWithTemplate(templateFn, parentElement, list, position
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
+
+export function getDiscount(price) {
+  if (price > 300) {
+    return 20;
+  } else if (price >= 150) {
+    return 12;
+  } else {
+    return 5;
+  }
+}
+
+export function getDiscountedPrice(price) {
+  const discount = getDiscount(price);
+  return price - (price * discount / 100);
+}

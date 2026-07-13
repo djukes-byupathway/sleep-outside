@@ -1,4 +1,4 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, getDiscount, getDiscountedPrice } from "./utils.mjs";
 
 export default class ProductDetails {
     constructor(productId, dataSource) {
@@ -30,13 +30,21 @@ function productDetailsTemplate(product) {
   document.querySelector('h2').textContent = product.Brand.Name;
   document.querySelector('h3').textContent = product.NameWithoutBrand;
 
-  const productImage = document.getElementById('productImage');
-  productImage.src = product.Image;
-  productImage.alt = product.NameWithoutBrand;
+    const productImage = document.getElementById('productImage');
+    const price = product.FinalPrice;
+    const discount = getDiscount(price);
+    const discountedPrice = getDiscountedPrice(price);
 
-  document.getElementById('productPrice').textContent = product.FinalPrice;
-  document.getElementById('productColor').textContent = product.Colors[0].ColorName;
-  document.getElementById('productDesc').innerHTML = product.DescriptionHtmlSimple;
+    productImage.src = product.Image;
+    productImage.alt = product.NameWithoutBrand;
 
-  document.getElementById('addToCart').dataset.id = product.Id;
+    document.getElementById('productPrice').textContent = `Price: ${product.FinalPrice}`;
+    document.getElementById("discountedPrice").textContent =
+        `Discounted Price: ${discountedPrice.toFixed(2)}`;
+    document.getElementById("productDiscount").textContent =
+        `${discount}% OFF`;
+    document.getElementById('productColor').textContent = product.Colors[0].ColorName;
+    document.getElementById('productDesc').innerHTML = product.DescriptionHtmlSimple;
+
+    document.getElementById('addToCart').dataset.id = product.Id;
 }
