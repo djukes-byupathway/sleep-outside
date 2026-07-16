@@ -30,11 +30,11 @@ export function getParam(param) {
   return product
 }
 
-export function renderListWithTemplate(templateFn, parentElement, list, position="afterBegin", clear=false) {
-  const htmlStrings = list.map(productCardTemplate);
+export function renderListWithTemplate(templateFn, parentElement, list, position="afterbegin", clear=false) {
+  const htmlStrings = list.map(templateFn);
 
   if (clear) {
-    parentElement.innerHTMl = "";
+    parentElement.innerHTML = "";
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
