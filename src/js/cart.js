@@ -1,5 +1,5 @@
 import { getLocalStorage } from "./utils.mjs";
-import '../css/style.css';
+
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
