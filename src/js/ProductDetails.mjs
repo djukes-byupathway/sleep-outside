@@ -1,50 +1,155 @@
-import { getLocalStorage, setLocalStorage, getDiscount, getDiscountedPrice } from "./utils.mjs";
+import { 
+    getLocalStorage, 
+    setLocalStorage, 
+    getDiscount, 
+    getDiscountedPrice 
+} from "./utils.mjs";
+
 
 export default class ProductDetails {
+
     constructor(productId, dataSource) {
+
         this.productId = productId;
         this.product = {};
         this.dataSource = dataSource;
+
     }
 
+
+
     async init() {
-        this.product = await this.dataSource.findProductById(this.productId);
+
+        this.product = await this.dataSource.findProductById(
+            this.productId
+        );
+
 
         this.renderProductDetails();
 
-        document.getElementById("addToCart")
-            .addEventListener("click", this.addProductToCart.bind(this));
+
+
+        document
+        .getElementById("addToCart")
+        .addEventListener(
+            "click",
+            this.addProductToCart.bind(this)
+        );
+
     }
 
-    addProductToCart(product) {
-        const cartItems = getLocalStorage("so-cart") || [];
-        cartItems.push(product);
-        setLocalStorage("so-cart", cartItems);
+
+
+
+    addProductToCart() {
+
+        const cartItems =
+        getLocalStorage("so-cart") || [];
+
+
+        cartItems.push(this.product);
+
+
+        setLocalStorage(
+            "so-cart",
+            cartItems
+        );
+
     }
+
+
 
     renderProductDetails() {
+
         productDetailsTemplate(this.product);
+
     }
+
 }
+
+
+
+
 function productDetailsTemplate(product) {
-  document.querySelector('h2').textContent = product.Brand.Name;
-  document.querySelector('h3').textContent = product.NameWithoutBrand;
 
-    const productImage = document.getElementById('productImage');
-    const price = product.FinalPrice;
-    const discount = getDiscount(price);
-    const discountedPrice = getDiscountedPrice(price);
 
-    productImage.src = product.Image;
-    productImage.alt = product.NameWithoutBrand;
+    document.querySelector("h2").textContent =
+    product.Brand.Name;
 
-    document.getElementById('productPrice').textContent = `Price: ${product.FinalPrice}`;
-    document.getElementById("discountedPrice").textContent =
-        `Discounted Price: ${discountedPrice.toFixed(2)}`;
-    document.getElementById("productDiscount").textContent =
-        `${discount}% OFF`;
-    document.getElementById('productColor').textContent = product.Colors[0].ColorName;
-    document.getElementById('productDesc').innerHTML = product.DescriptionHtmlSimple;
 
-    document.getElementById('addToCart').dataset.id = product.Id;
+
+    document.querySelector("h3").textContent =
+    product.NameWithoutBrand;
+
+
+
+    const productImage =
+    document.getElementById("productImage");
+
+
+
+    productImage.src =
+    product.Images.PrimaryLarge;
+
+
+
+    productImage.alt =
+    product.Name;
+
+
+
+    const price =
+    product.FinalPrice;
+
+
+
+    const discount =
+    getDiscount(price);
+
+
+
+    const discountedPrice =
+    getDiscountedPrice(price);
+
+
+
+    document.getElementById("productPrice")
+    .textContent =
+    `$${price}`;
+
+
+
+    document.getElementById("discountedPrice")
+    .textContent =
+    `$${discountedPrice.toFixed(2)}`;
+
+
+
+    document.getElementById("productDiscount")
+    .textContent =
+    `${discount}% OFF`;
+
+
+
+    if(product.Colors){
+
+        document.getElementById("productColor")
+        .textContent =
+        product.Colors[0].ColorName;
+
+    }
+
+
+
+    document.getElementById("productDesc")
+    .innerHTML =
+    product.DescriptionHtmlSimple;
+
+
+
+    document
+    .getElementById("addToCart")
+    .dataset.id =
+    product.Id;
+
 }
