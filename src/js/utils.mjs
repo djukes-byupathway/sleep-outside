@@ -19,23 +19,29 @@ export function setClick(selector, callback) {
     event.preventDefault();
     callback();
   });
+
   qs(selector).addEventListener("click", callback);
 }
 
 export function getParam(param) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const product = urlParams.get('product')
-
-  return product
+  return urlParams.get(param);
 }
 
-export function renderListWithTemplate(templateFn, parentElement, list, position="afterBegin", clear=false) {
-  const htmlStrings = list.map(productCardTemplate);
+export function renderListWithTemplate(
+  templateFn,
+  parentElement,
+  list,
+  position = "afterbegin",
+  clear = false
+) {
+  const htmlStrings = list.map(templateFn);
 
   if (clear) {
-    parentElement.innerHTMl = "";
+    parentElement.innerHTML = "";
   }
+
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
 
@@ -51,5 +57,39 @@ export function getDiscount(price) {
 
 export function getDiscountedPrice(price) {
   const discount = getDiscount(price);
-  return price - (price * discount / 100);
+  return price - (price * discount) / 100;
+}
+
+export function renderWithTemplate(
+  template,
+  parentElement,
+  data,
+  callback
+) {
+  parentElement.innerHTML = template;
+
+  if (callback) {
+    callback(data);
+  }
+}
+
+async function loadTemplate(path) {
+  const response = await fetch(path);
+  return await response.text();
+}
+
+export async function loadHeaderFooter() {
+  const header = await loadTemplate("/partials/header.html");
+  const footer = await loadTemplate("/partials/footer.html");
+
+  const headerElement = document.querySelector("#main-header");
+  const footerElement = document.querySelector("#main-footer");
+
+  if (headerElement) {
+    renderWithTemplate(header, headerElement);
+  }
+
+  if (footerElement) {
+    renderWithTemplate(footer, footerElement);
+  }
 }
