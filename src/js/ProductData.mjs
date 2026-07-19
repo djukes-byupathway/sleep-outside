@@ -20,4 +20,9 @@ export default class ProductData {
     const products = await this.getData();
     return products.find((item) => item.Id === id);
   }
+  async searchProducts(searchTerm) {
+    const products = await this.getData();
+    const term = searchTerm.toLowerCase();
+    return products.filter((item) => item.Name.toLowerCase().includes(term));
+  }
 }

@@ -123,6 +123,43 @@ button {
 
 /* End utility classes */
 
+/* Search form styles */
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex: 1;
+  max-width: 400px;
+  margin: 0 1em;
+}
+
+.search-form input[type="search"] {
+  flex: 1;
+  padding: 0.4em 0.6em;
+  border: 1px solid var(--light-grey);
+  font-size: 1em;
+}
+
+.search-form button {
+  padding: 0.4em 1em;
+  margin: 0;
+  font-size: 1em;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* End search form styles */
+
 /* Cart icon styles */
 .cart {
   padding-top: 1em;
