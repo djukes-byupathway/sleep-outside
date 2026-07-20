@@ -3,9 +3,27 @@ import { getLocalStorage, loadHeaderFooter } from "./utils.mjs";
 loadHeaderFooter();
 
 function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart");
-  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-  document.querySelector(".product-list").innerHTML = htmlItems.join("");
+  try {
+    let cartItems = getLocalStorage("so-cart");
+
+    if (!Array.isArray(cartItems)) {
+      // display a warning message if the cart is empty
+      console.warn("so-cart is not an array or is missing. Initializing empty cart.");
+      cartItems = [];
+    }
+
+    const htmlItems = cartItems.map((item) => cartItemTemplate(item));
+    document.querySelector(".product-list").innerHTML = htmlItems.join("");
+  } catch (error) {
+    console.error("Critical error in renderCartContents():", error);
+
+    // Fallback: clear the container or show error message
+    const productList = document.querySelector(".product-list");
+    if (productList) {
+      productList.innerHTML = "<p>Error loading cart. Please refresh the page.</p>";
+    }
+  }
+  
 }
 
 function cartItemTemplate(item) {
