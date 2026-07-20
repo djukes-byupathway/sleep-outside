@@ -30,7 +30,7 @@ export function getParam(param) {
   return product
 }
 
-export function renderListWithTemplate(templateFn, parentElement, list, position="afterBegin", clear=false) {
+export function renderListWithTemplate(template, parentElement, list, position="afterBegin", clear=false) {
   const htmlStrings = list.map(productCardTemplate);
 
   if (clear) {
@@ -52,4 +52,28 @@ export function getDiscount(price) {
 export function getDiscountedPrice(price) {
   const discount = getDiscount(price);
   return price - (price * discount / 100);
+}
+
+export function renderWithTemplate(template, parentElement, data, callback) {
+  parentElement.innerHTML = template;
+  if(callback) {
+    callback(data);
+  }
+}
+
+export async function loadTemplate(path) {
+  const res = await fetch(path);
+  const template = await res.text();
+  return template;
+}
+
+export async function loadHeaderFooter() {
+  const headerTemplate = await loadTemplate("../partials/header.html");
+  const footerTemplate = await loadTemplate("../partials/footer.html")
+
+  const headerElement = document.querySelector("#mainHeader");
+  const footerElement = document.querySelector("#mainFooter");
+
+  renderWithTemplate(headerTemplate, headerElement);
+  renderWithTemplate(footerTemplate, footerElement);
 }
