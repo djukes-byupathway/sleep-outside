@@ -9,5 +9,3 @@ const productId = getParam("product");
 
 const productDetails = new ProductDetails(productId, dataSource);
 productDetails.init();
-
-
