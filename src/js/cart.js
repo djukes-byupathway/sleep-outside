@@ -8,7 +8,9 @@ function renderCartContents() {
 
     if (!Array.isArray(cartItems)) {
       // display a warning message if the cart is empty
-      console.warn("so-cart is not an array or is missing. Initializing empty cart.");
+      console.warn(
+        "so-cart is not an array or is missing. Initializing empty cart.",
+      );
       cartItems = [];
     }
 
@@ -20,10 +22,10 @@ function renderCartContents() {
     // Fallback: clear the container or show error message
     const productList = document.querySelector(".product-list");
     if (productList) {
-      productList.innerHTML = "<p>Error loading cart. Please refresh the page.</p>";
+      productList.innerHTML =
+        "<p>Error loading cart. Please refresh the page.</p>";
     }
   }
-  
 }
 
 function cartItemTemplate(item) {
