@@ -17,3 +17,6 @@ productList.init();
 // Load and display any announcement alerts
 const alert = new Alert();
 alert.render();
+import { loadHeaderFooter } from "./utils.mjs";
+
+loadHeaderFooter();
