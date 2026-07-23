@@ -9,14 +9,13 @@ export default class ProductDetails {
 
     async init() {
         this.product = await this.dataSource.findProductById(this.productId);
-
         this.renderProductDetails();
-
-        document.getElementById("addToCart")
+        document
+            .getElementById("addToCart")
             .addEventListener("click", this.addProductToCart.bind(this));
     }
 
-    addProductToCart(product) {
+    addProductToCart() {
         const cartItems = getLocalStorage("so-cart") || [];
         cartItems.push(product);
         setLocalStorage("so-cart", cartItems);
@@ -26,25 +25,22 @@ export default class ProductDetails {
         productDetailsTemplate(this.product);
     }
 }
+
 function productDetailsTemplate(product) {
-  document.querySelector('h2').textContent = product.Brand.Name;
-  document.querySelector('h3').textContent = product.NameWithoutBrand;
+    document.querySelector("h2").textContent = product.Category.charAt(0).toUpperCase() + product.Category.slice(1);
+    document.querySelector("#p-brand").textContent = product.Brand.Name;
+    document.querySelector("#p-name").textContent = product.NameWithoutBrand;
 
-    const productImage = document.getElementById('productImage');
-    const price = product.FinalPrice;
-    const discount = getDiscount(price);
-    const discountedPrice = getDiscountedPrice(price);
-
-    productImage.src = product.Images.PrimaryLarge;
+    const productImage = document.querySelector("#p-image");
+    productImage.src = product.Images.PrimaryExtraLarge;
     productImage.alt = product.NameWithoutBrand;
+    const euroPrice = new Intl.NumberFormat('de-DE',
+        {
+            style: 'currency', currency: 'EUR',
+        }).format(Number(product.FinalPrice) * 0.85);
+    document.querySelector("#p-price").textContent = `${euroPrice}`;
+    document.querySelector("#p-color").textContent = product.Colors[0].ColorName;
+    document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple;
 
-    document.getElementById('productPrice').textContent = `Price: ${product.FinalPrice}`;
-    document.getElementById("discountedPrice").textContent =
-        `Discounted Price: ${discountedPrice.toFixed(2)}`;
-    document.getElementById("productDiscount").textContent =
-        `${discount}% OFF`;
-    document.getElementById('productColor').textContent = product.Colors[0].ColorName;
-    document.getElementById('productDesc').innerHTML = product.DescriptionHtmlSimple;
-
-    document.getElementById('addToCart').dataset.id = product.Id;
+    document.querySelector("#add-to-cart").dataset.id = product.Id;
 }
