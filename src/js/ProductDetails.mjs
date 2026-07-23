@@ -35,7 +35,7 @@ function productDetailsTemplate(product) {
     const discount = getDiscount(price);
     const discountedPrice = getDiscountedPrice(price);
 
-    productImage.src = product.Image;
+    productImage.src = product.Images.PrimaryLarge;
     productImage.alt = product.NameWithoutBrand;
 
     document.getElementById('productPrice').textContent = `Price: ${product.FinalPrice}`;
