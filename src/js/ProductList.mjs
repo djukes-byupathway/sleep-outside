@@ -1,4 +1,16 @@
 // ProductList.mjs
+import { renderListWithTemplate } from "./utils.mjs";
+
+function productCardTemplate(product) {
+  return `<li class="product-card">
+    <a href="../product_pages/?product=${product.Id}">
+      <img src="${product.Images.PrimaryMedium}" alt="Image of ${product.Name}">
+      <h2 class="card__brand">${product.Brand.Name}</h2>
+      <h3 class="card__name">${product.Name}</h3>
+      <p class="product-card__price">$${product.FinalPrice}</p>
+    </a>
+  </li>`;
+}
 
 export default class ProductList {
   constructor(category, dataSource, listElement) {
@@ -10,57 +22,19 @@ export default class ProductList {
 
     // Store the HTML element where the products will be displayed
     this.listElement = listElement;
-
-    // Array that will hold the products after they are loaded
-    this.products = [];
   }
 
   // Load the products from the data source
   async init() {
-    this.products = await this.dataSource.getData(this.category);
-
-    // Later this will display the products
+    const list = await this.dataSource.getData(this.category);
     this.renderList();
+    document.querySelector("#categoryTitle").textContent = this.category;
   }
 
-  // This method will be completed later
   renderList() {
-    console.log(this.products);
+    renderListWithTemplate(productCardTemplate, this.listElement, list);
   }
-  
-import { renderListWithTemplate } from "./utils.mjs";
-
-
-function productCardTemplate(product) {
-    return `<li class="product-card">
-    <a href="../product_pages/?product=${product.Id}">
-      <img src="${product.Images.PrimaryMedium}" alt="Image of ${product.Name}">
-      <h2 class="card__brand">${product.Brand.Name}</h2>
-      <h3 class="card__name">${product.Name}</h3>
-      <p class="product-card__price">$${product.FinalPrice}</p>
-    </a>
-  </li>`;
 }
 
-export default class ProductList {
-    constructor(category, dataSource, listElement) {
-        this.category = category;
-        this.dataSource = dataSource;
-        this.listElement = listElement;
-    }
 
-    async init() {  
-        const list = await this.dataSource.getData(this.category);
-        this.renderList(list);
-        document.querySelector("#categoryTitle").textContent = this.category;
-    }
 
-    renderList(list) {
-        // const htmlStrings = list.map(productCardTemplate);
-        // this.listElement.insertAdjacentHTML("afterbegin", htmlStrings.join(""));
-
-        // apply use new utility function instead of the commented code above
-        renderListWithTemplate(productCardTemplate, this.listElement, list);
-
-    }
-}
