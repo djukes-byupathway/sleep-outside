@@ -1,11 +1,6 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
 
 loadHeaderFooter();
-
-
-// need to add cart total calc and display
-//($${total}) 
-
 
 function renderCartContents() {
   try {
@@ -20,6 +15,7 @@ function renderCartContents() {
     }
 
     const htmlItems = cartItems.map((item) => cartItemTemplate(item));
+    
     document.querySelector(".product-list").innerHTML = htmlItems.join("");
     
     // need to add cart total calc and display
@@ -36,6 +32,14 @@ function renderCartContents() {
     }
   }
 }
+
+/* function renderCartContents() {
+  const cartItems = getLocalStorage("so-cart");
+  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
+  document.querySelector(".product-list").innerHTML = htmlItems.join("");
+} */
+
+
 
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">

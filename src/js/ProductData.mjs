@@ -1,3 +1,9 @@
+/* 
+
+deprecated on week 4 with team assignment
+
+*/
+
 const baseURL = import.meta.env.VITE_SERVER_URL;
 
 function convertToJson(res) {
@@ -19,12 +25,14 @@ export default class ProductData {
 
     return data.Result;
   }
+
   async findProductById(id) {
     const response = await fetch(`${baseURL}product/${id}`);
     const data = await convertToJson(response);
-    
+    console.log(data.Result);
     return data.Result;
   }
+  
   async searchProducts(searchTerm) {
     const products = await this.getData();
     const term = searchTerm.toLowerCase();
