@@ -27,11 +27,14 @@ export default class ProductList {
   // Load the products from the data source
   async init() {
     const list = await this.dataSource.getData(this.category);
-    this.renderList(list);
+    this.renderList();
     document.querySelector("#categoryTitle").textContent = this.category;
   }
 
-  renderList(list) {
+  renderList() {
     renderListWithTemplate(productCardTemplate, this.listElement, list);
   }
 }
+
+
+
