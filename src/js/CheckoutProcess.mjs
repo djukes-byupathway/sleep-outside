@@ -1,4 +1,14 @@
 import { getLocalStorage } from "./utils.mjs";
+import ExternalServices from "./ExternalServices.mjs";
+
+function packageItems(items) {
+  return items.map((item) => ({
+    id: item.Id,
+    name: item.Name,
+    price: item.FinalPrice,
+    quantity: item.quantity,
+  }));
+}
 
 export default class CheckoutProcess {
   constructor(key, outputSelector) {
@@ -28,7 +38,9 @@ export default class CheckoutProcess {
       `${this.outputSelector} #subtotal`
     );
 
-    subtotal.innerText = `$${this.itemTotal.toFixed(2)}`;
+    if (subtotal) {
+      subtotal.innerText = `$${this.itemTotal.toFixed(2)}`;
+    }
 
     const items = document.querySelector(
       `${this.outputSelector} #itemCount`
@@ -60,8 +72,50 @@ export default class CheckoutProcess {
     const shipping = document.querySelector(`${this.outputSelector} #shipping`);
     const total = document.querySelector(`${this.outputSelector} #orderTotal`);
 
-    tax.innerText = `$${this.tax.toFixed(2)}`;
-    shipping.innerText = `$${this.shipping.toFixed(2)}`;
-    total.innerText = `$${this.orderTotal.toFixed(2)}`;
+    if (tax) {
+      tax.innerText = `$${this.tax.toFixed(2)}`;
+    }
+
+    if (shipping) {
+      shipping.innerText = `$${this.shipping.toFixed(2)}`;
+    }
+
+    if (total) {
+      total.innerText = `$${this.orderTotal.toFixed(2)}`;
+    }
+  }
+
+  async checkout(form) {
+    const formData = new FormData(form);
+
+    const order = Object.fromEntries(formData.entries());
+
+    order.orderDate = new Date().toISOString();
+
+    order.items = packageItems(this.list);
+
+    order.tax = this.tax.toFixed(2);
+
+    order.shipping = this.shipping;
+
+    order.orderTotal = this.orderTotal.toFixed(2);
+
+    const services = new ExternalServices();
+
+    try {
+      const result = await services.checkout(order);
+
+      console.log(result);
+
+      alert("Order submitted successfully!");
+
+      localStorage.removeItem(this.key);
+
+      window.location.href = "/";
+    } catch (err) {
+      console.error(err);
+
+      alert("There was a problem submitting your order.");
+    }
   }
 }
