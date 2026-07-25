@@ -1,40 +1,116 @@
+import { getLocalStorage } from "./utils.mjs";
+import ExternalServices from "./ExternalServices.mjs";
+
+function packageItems(items) {
+  return items.map((item) => ({
+    id: item.Id,
+    name: item.Name,
+    price: item.FinalPrice,
+    quantity: item.quantity,
+  }));
+}
+
 export default class CheckoutProcess {
-    constructor(key, outputSelector) {
-        this.key = key;
-        this.outputSelector = outputSelector;
-        this.list = [];
-        this.itemTotal = 0;
-        this.shipping = 0;
-        this.tax = 0;
-        this.orderTotal = 0;
-    }
-    
-    init() {
-        this.list = getLocalStorage(this.key);
-        this.calculateItemSummary();
-    }
+  constructor(key, outputSelector) {
+    this.key = key;
+    this.outputSelector = outputSelector;
+    this.list = [];
+    this.itemTotal = 0;
+    this.shipping = 0;
+    this.tax = 0;
+    this.orderTotal = 0;
+  }
 
-    calculateItemSubTotal() {
-        // calculate and display the total dollar amount of the items in the cart, and the number of items.
+  init() {
+    this.list = getLocalStorage(this.key) || [];
+    this.calculateItemSubTotal();
+  }
 
-    }
+  calculateItemSubTotal() {
+    let totalItems = 0;
 
-    calculateOrderTotal() {
-        // calculate the tax and shipping amounts. Add those to the cart total to figure out the order total
-        this.tax = (this.itemTotal ...)
-        this.shipping =
-            this.orderTotal =
+    this.itemTotal = this.list.reduce((sum, item) => {
+      totalItems += item.quantity;
+      return sum + item.FinalPrice * item.quantity;
+    }, 0);
 
-            // display the totals.
-            this.displayOrderTotals();
-    }
-    
-    displayOrderTotals() {
-        // once the totals are all calculated display them in the order summary page
-        const tax = document.querySelector(`${this.outputSelector} #tax`);
+    const subtotal = document.querySelector(
+      `${this.outputSelector} #subtotal`
+    );
 
-
-        tax.innerText = `$${this.tax.toFixed(2)}`;
+    if (subtotal) {
+      subtotal.innerText = `$${this.itemTotal.toFixed(2)}`;
     }
 
+    const itemCount = document.querySelector(
+      `${this.outputSelector} #itemCount`
+    );
+
+    if (itemCount) {
+      itemCount.innerText = totalItems;
+    }
+  }
+
+  calculateOrderTotal() {
+    let totalItems = 0;
+
+    this.list.forEach((item) => {
+      totalItems += item.quantity;
+    });
+
+    this.tax = this.itemTotal * 0.06;
+
+    this.shipping = totalItems > 0 ? 10 + (totalItems - 1) * 2 : 0;
+
+    this.orderTotal = this.itemTotal + this.tax + this.shipping;
+
+    this.displayOrderTotals();
+  }
+
+  displayOrderTotals() {
+    const tax = document.querySelector(`${this.outputSelector} #tax`);
+    const shipping = document.querySelector(
+      `${this.outputSelector} #shipping`
+    );
+    const total = document.querySelector(
+      `${this.outputSelector} #orderTotal`
+    );
+
+    if (tax) {
+      tax.innerText = `$${this.tax.toFixed(2)}`;
+    }
+
+    if (shipping) {
+      shipping.innerText = `$${this.shipping.toFixed(2)}`;
+    }
+
+    if (total) {
+      total.innerText = `$${this.orderTotal.toFixed(2)}`;
+    }
+  }
+
+  async checkout(form) {
+    const formData = new FormData(form);
+    const order = Object.fromEntries(formData.entries());
+
+    order.orderDate = new Date().toISOString();
+    order.items = packageItems(this.list);
+    order.tax = this.tax.toFixed(2);
+    order.shipping = this.shipping;
+    order.orderTotal = this.orderTotal.toFixed(2);
+
+    const services = new ExternalServices();
+
+    try {
+      await services.checkout(order);
+
+      localStorage.removeItem(this.key);
+
+      window.location = "/checkout/success.html";
+    } catch (err) {
+      console.error(err);
+
+      alert(err.message.Message || "Unable to complete checkout.");
+    }
+  }
 }
