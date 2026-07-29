@@ -30,7 +30,8 @@ function productCardTemplate(product) {
 async function renderResults(searchTerm) {
   if (!searchTerm) {
     titleElement.textContent = "Search Results";
-    listElement.innerHTML = "<li>Enter a search term above to find products.</li>";
+    listElement.innerHTML =
+      "<li>Enter a search term above to find products.</li>";
     return;
   }
 

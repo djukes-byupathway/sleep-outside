@@ -1,4 +1,8 @@
-import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  loadHeaderFooter,
+} from "./utils.mjs";
 
 loadHeaderFooter();
 
@@ -15,12 +19,11 @@ function renderCartContents() {
     }
 
     const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-    
-    document.querySelector(".product-list").innerHTML = htmlItems.join("");
-    
-    // need to add cart total calc and display
-    //($${total}) 
 
+    document.querySelector(".product-list").innerHTML = htmlItems.join("");
+
+    // need to add cart total calc and display
+    //($${total})
   } catch (error) {
     console.error("Critical error in renderCartContents():", error);
 
@@ -38,8 +41,6 @@ function renderCartContents() {
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
 } */
-
-
 
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
