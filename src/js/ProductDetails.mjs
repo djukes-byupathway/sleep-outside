@@ -26,17 +26,24 @@ export default class ProductDetails {
         productDetailsTemplate(this.product);
     }
 }
-function productDetailsTemplate(product) {
-    document.querySelector('h2').textContent = product.Brand.Name;
-    document.querySelector('h3').textContent = product.NameWithoutBrand;
 
-    const productImage = document.getElementById('productImage');
+function productDetailsTemplate(product) {
+    document.querySelector('h3').textContent = product.NameWithoutBrand;
+    document.querySelector('h2').textContent = product.Brand.Name;
+    
+    const productImage = document.querySelector("#productImage");
+    productImage.src = product.Images.PrimaryExtraLarge;
+    productImage.alt = product.NameWithoutBrand;
+
+        // product.NameWithoutBrand;
+
+
     const price = product.FinalPrice;
+
     const discount = getDiscount(price);
     const discountedPrice = getDiscountedPrice(price);
 
-    productImage.src = product.Images.PrimaryLarge;
-    productImage.alt = product.NameWithoutBrand;
+
 
     document.getElementById('productPrice').textContent = `Price: ${product.FinalPrice}`;
     document.getElementById("discountedPrice").textContent =
