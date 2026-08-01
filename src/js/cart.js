@@ -24,18 +24,20 @@ function renderCartContents() {
 
     const cartFooter = document.querySelector(".cart-footer");
 
-    if (cartItems.length > 0) {
-      cartFooter.classList.remove("hide");
+    if (cartFooter) {
+      if (cartItems.length > 0) {
+        cartFooter.classList.remove("hide");
 
-      const total = cartItems.reduce(
-        (sum, item) => sum + Number(item.FinalPrice),
-        0,
-      );
+        const total = cartItems.reduce(
+          (sum, item) => sum + Number(item.FinalPrice),
+          0
+        );
 
-      document.querySelector(".cart-total").textContent =
-        `Total: $${total.toFixed(2)}`;
-    } else {
-      cartFooter.classList.add("hide");
+        document.querySelector(".cart-total").textContent =
+          `Total: $${total.toFixed(2)}`;
+      } else {
+        cartFooter.classList.add("hide");
+      }
     }
 
     // need to add cart total calc and display
