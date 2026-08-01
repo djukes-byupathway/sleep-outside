@@ -22,6 +22,22 @@ function renderCartContents() {
 
     document.querySelector(".product-list").innerHTML = htmlItems.join("");
 
+    const cartFooter = document.querySelector(".cart-footer");
+
+    if (cartItems.length > 0) {
+      cartFooter.classList.remove("hide");
+
+      const total = cartItems.reduce(
+        (sum, item) => sum + Number(item.FinalPrice),
+        0,
+      );
+
+      document.querySelector(".cart-total").textContent =
+        `Total: $${total.toFixed(2)}`;
+    } else {
+      cartFooter.classList.add("hide");
+    }
+
     // need to add cart total calc and display
     //($${total})
   } catch (error) {
@@ -36,6 +52,17 @@ function renderCartContents() {
   }
 }
 
+function calculateCartTotal() {
+  const cartItems = getLocalStorage("so-cart") || [];
+
+  const total = cartItems.reduce(
+    (sum, item) => sum + Number(item.FinalPrice),
+    0,
+  );
+
+  document.querySelector("#cartTotal").textContent = `$${total.toFixed(2)}`;
+}
+
 /* function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
@@ -46,7 +73,7 @@ function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
   <a href="#" class="cart-card__image">
     <img
-      src="${item.Image}"
+      src="${item.Images.PrimaryMedium}"
       alt="${item.Name}"
     />
   </a>
@@ -54,7 +81,7 @@ function cartItemTemplate(item) {
     <h2 class="card__name">${item.Name}</h2>
   </a>
   <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-  <p class="cart-card__quantity">qty: 1</p>
+  <p class="cart-card__quantity">Qty: 1</p>
   <p class="cart-card__price">$${item.FinalPrice}</p>
   <span class="cart-card__remove" data-id="${item.Id}">X</span>
 </li>`;
@@ -67,6 +94,7 @@ function removeItemFromCart(id) {
   const updatedCart = cartItems.filter((item) => item.Id !== id);
   setLocalStorage("so-cart", updatedCart);
   renderCartContents();
+  calculateCartTotal();
 }
 
 function cartRemoveHandler(e) {
@@ -81,3 +109,4 @@ document
   .addEventListener("click", cartRemoveHandler);
 
 renderCartContents();
+calculateCartTotal();

@@ -18,8 +18,19 @@ export default class ProductDetails {
 
     addProductToCart(product) {
         const cartItems = getLocalStorage("so-cart") || [];
-        cartItems.push(product);
+        cartItems.push(this.product);
         setLocalStorage("so-cart", cartItems);
+
+        const button = document.getElementById("addToCart");
+        button.textContent = "✓ Added to Cart";
+        button.disabled = true;
+        button.classList.add("added");
+
+        setTimeout(() => {
+            button.textContent = "Add to Cart";
+            button.disabled = false;
+            button.classList.remove("added");
+        }, 2000);
     }
 
     renderProductDetails() {

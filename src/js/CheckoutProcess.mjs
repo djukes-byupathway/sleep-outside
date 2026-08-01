@@ -53,7 +53,7 @@ export default class CheckoutProcess {
         itemNumElement.innerText = this.list.length;
         // calculate the total of all the items in the cart
         const amounts = this.list.map((item) => item.FinalPrice);
-        this.itemTotal = amounts.reduce((sum, item) => sum + item);
+        this.itemTotal = amounts.reduce((sum, item) => sum + item), 0;
         summaryElement.innerText = `$${this.itemTotal}`;;
     }
 

@@ -22,7 +22,7 @@ export default class ProductList {
   async init() {
     const list = await this.dataSource.getData(this.category);
     this.renderList(list);
-    document.querySelector("#categoryTitle").textContent = this.category;
+    document.querySelector("#categoryTitle").textContent = this.category.charAt(0).toUpperCase() + this.category.slice(1);
   }
 
   renderList(list) {
