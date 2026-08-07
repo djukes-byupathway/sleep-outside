@@ -7,41 +7,47 @@ import {
 loadHeaderFooter();
 
 function renderCartContents() {
+  let cartItems = getLocalStorage("so-cart");
+  // check id cartItems is empty because there is no values in local storage
+  //  and if empty log a warning to console and set cart to an empty array
   try {
-    let cartItems = getLocalStorage("so-cart");
-
     if (!Array.isArray(cartItems)) {
       // display a warning message if the cart is empty
       console.warn(
         "so-cart is not an array or is missing. Initializing empty cart.",
       );
       cartItems = [];
+    } else {
+
+      const htmlItems = cartItems.map((item) => cartItemTemplate(item));
+
+      document.querySelector(".product-list").innerHTML = htmlItems.join("");
+
     }
 
-    const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-
-    document.querySelector(".product-list").innerHTML = htmlItems.join("");
-
     const cartFooter = document.querySelector(".cart-footer");
-
     if (cartFooter) {
       if (cartItems.length > 0) {
-        cartFooter.classList.remove("hide");
+        // for debugging un comment out the following console.warn
+        /* console.warn(
+          `cart item count: ${cartItems.length}`
+        ); */
 
+        cartFooter.classList.remove("hide");
+/* 
         const total = cartItems.reduce(
           (sum, item) => sum + Number(item.FinalPrice),
           0
         );
 
         document.querySelector(".cart-total").textContent =
-          `Total: $${total.toFixed(2)}`;
+          `Total: $${total.toFixed(2)}`; */
+
+        calculateCartTotal();
       } else {
         cartFooter.classList.add("hide");
       }
     }
-
-    // need to add cart total calc and display
-    //($${total})
   } catch (error) {
     console.error("Critical error in renderCartContents():", error);
 
@@ -62,14 +68,9 @@ function calculateCartTotal() {
     0,
   );
 
-  document.querySelector("#cartTotal").textContent = `$${total.toFixed(2)}`;
+  document.querySelector(".cart-total").textContent =
+    `Total: $${total.toFixed(2)}`;
 }
-
-/* function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart");
-  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-  document.querySelector(".product-list").innerHTML = htmlItems.join("");
-} */
 
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
@@ -96,7 +97,6 @@ function removeItemFromCart(id) {
   const updatedCart = cartItems.filter((item) => item.Id !== id);
   setLocalStorage("so-cart", updatedCart);
   renderCartContents();
-  calculateCartTotal();
 }
 
 function cartRemoveHandler(e) {
@@ -111,4 +111,3 @@ document
   .addEventListener("click", cartRemoveHandler);
 
 renderCartContents();
-calculateCartTotal();

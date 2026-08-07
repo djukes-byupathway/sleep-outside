@@ -29,7 +29,7 @@ function packageItems(items) {
 export default class CheckoutProcess {
     constructor(key, outputSelector) {
         this.key = key;
-        this.outputSelector = outputSelector;
+        this.outputSelector = outputSelector;  
         this.list = [];
         this.itemTotal = 0;
         this.shipping = 0;

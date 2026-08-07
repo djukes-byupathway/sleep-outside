@@ -17,3 +17,4 @@ document.querySelector("#checkoutSubmit").addEventListener("click", (e) => {
 
   order.checkout();
 });
+  
