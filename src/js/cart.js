@@ -6,6 +6,13 @@ import {
 
 loadHeaderFooter();
 
+document
+  .querySelector(".product-list")
+  .addEventListener("click", cartRemoveHandler);
+
+renderCartContents();
+
+
 function renderCartContents() {
   let cartItems = getLocalStorage("so-cart");
   // check id cartItems is empty because there is no values in local storage
@@ -17,12 +24,10 @@ function renderCartContents() {
         "so-cart is not an array or is missing. Initializing empty cart.",
       );
       cartItems = [];
+      setLocalStorage("so-cart", cartItems);
     } else {
-
       const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-
       document.querySelector(".product-list").innerHTML = htmlItems.join("");
-
     }
 
     const cartFooter = document.querySelector(".cart-footer");
@@ -105,9 +110,3 @@ function cartRemoveHandler(e) {
   }
   removeItemFromCart(e.target.dataset.id);
 }
-
-document
-  .querySelector(".product-list")
-  .addEventListener("click", cartRemoveHandler);
-
-renderCartContents();
